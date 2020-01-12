@@ -55,12 +55,12 @@ router.post('/signup', (req, res, next) => {
 });
 
 router.post('/login', (req, res, next) => {
-    console.log('sss');
+    //console.log('sss');
     User.find({ email: req.body.email })
         .exec()
         .then(user => {
             if(user){
-                console.log("user is not fuckiing herer")
+                console.log("UserOk")
             }
             if (user.length < 1) {
                 return res.status(401).json({
