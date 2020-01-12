@@ -42,7 +42,7 @@ class _LandingScreenState extends State<LandingScreen> {
     print(filename);
     try{
       FormData formData = new FormData.from({'file': new UploadFileInfo(picture, filename)});
-      var response = await Dio().post('http://192.168.8.101:3000/user/image',data: formData);
+      var response = await Dio().post('http://192.168.8.101:5000/user/image',data: formData);
       var state = response.data['message'];
       getText = state;
       print(getText);
@@ -140,7 +140,14 @@ class _LandingScreenState extends State<LandingScreen> {
                       highlightElevation: 10,
                       color: Colors.blue,
                       textColor: Colors.white, 
-                      onPressed:  upload, 
+                      onPressed: (){
+                        if(imageFile == null){
+                          SnackBar snackbar = SnackBar(content: Text('Not Select Image, Select the image'),);
+                          Scaffold.of(context).showSnackBar(snackbar);
+                        }else{
+                          upload();
+                        }
+                      }, 
                       label: Text("Convert"),
                     )
                 ),
