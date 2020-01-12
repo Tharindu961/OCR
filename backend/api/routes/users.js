@@ -54,11 +54,7 @@ router.post('/signup', (req, res, next) => {
 
 });
 
-
-
-
-router.delete('/:userId', (req, res, next) => {
-    User.remove({_id: req.params.userId})
+router.delete('/:userId', (req, res, next) => {    User.remove({_id: req.params.userId})
     .exec()
     .then(result => {
         res.status(200).json({
@@ -71,6 +67,34 @@ router.delete('/:userId', (req, res, next) => {
             error: err
         });
     });
+});
+
+const storage = multer.diskStorage({
+    destination: (req, file, callBack) => {
+        callBack(null, 'uploads');
+    },
+    filename: (req, file, callBack) => {
+        callBack(null, `${file.originalname}`);
+    }
+});
+
+var upload = multer({storage: storage});
+
+router.post('/image',upload.single('file'),(req,res,next) => {
+        const file = req.file;
+
+        Tesseract.recognize(
+            `./uploads/${file.originalname}`,
+            'eng',
+            { logger: m => console.log(m.progress) }
+          ).then(({ data: { text } }) => {
+            res.status(200).json({
+                message : text
+            });
+          })
+
+
+       
 });
 
 
